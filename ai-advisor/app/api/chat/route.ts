@@ -1,46 +1,204 @@
+// =============================================================================
+// DAY 0: LangGraph Roofing Chatbot
+// =============================================================================
+// Yes, I'm about to ask you to connect on LinkedIn. I know. I'm sorry.
+// But it's still weirdly the best place to get hired, so here we are:
+// https://www.linkedin.com/in/briandjenney
+// =============================================================================
+
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import knowledgeBase from '@/data/knowledge-base.json' with { type: 'json' };
-import fs from 'fs';
+import { StateGraph, START, END, MemorySaver } from '@langchain/langgraph';
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { z } from 'zod';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+// =============================================================================
+// STATE - Defines the shape of data flowing through the graph (Zod schema)
+// =============================================================================
 
+const graphStateSchema = z.object({
+	messages: z
+		.array(z.object({ role: z.string(), content: z.string() }))
+		.describe('Conversation history'),
+	intent: z
+		.enum(['quote', 'payment', 'clarification'])
+		.optional()
+		.describe('Classified intent of the user request'),
+	customerInfo: z
+		.object({
+			name: z.string().optional(),
+			phone: z.string().optional(),
+			address: z.string().optional(),
+			accountId: z.string().optional(),
+		})
+		.optional()
+		.describe('Collected customer information'),
+	response: z.string().optional().describe('Final assistant response'),
+});
+
+type GraphState = z.infer<typeof graphStateSchema>;
+
+// LLM
+const model = new ChatGoogleGenerativeAI({
+	model: 'gemini-2.0-flash',
+	apiKey: process.env.GEMINI_API_KEY,
+});
+
+// =============================================================================
+// NODES - Each function is a node in the graph that processes state
+// =============================================================================
+
+async function classifyIntent(state: GraphState): Promise<Partial<GraphState>> {
+	const lastMessage = state.messages[state.messages.length - 1];
+
+	const classificationPrompt = `You are an intent classifier for a roofing company chatbot.
+Classify the following customer message into ONE of these categories:
+- quote: Customer wants a quote or estimate for roofing work (repairs, replacements, inspections)
+- payment: Customer wants to make a payment on their existing roof service/account
+- clarification: The message is unclear, off-topic, or needs more information
+
+Customer message: "${lastMessage.content}"
+
+Respond with ONLY the intent category (quote, payment, or clarification).`;
+
+	const response = await model
+		.withStructuredOutput(
+			z.object({ intent: z.enum(['quote', 'payment', 'clarification']) }),
+		)
+		.invoke(classificationPrompt);
+
+	return { intent: response.intent };
+}
+
+// Handles quote requests: Collects customer info and schedules follow-up
+async function handleQuote(state: GraphState): Promise<Partial<GraphState>> {
+	const lastMessage = state.messages[state.messages.length - 1];
+
+	const quotePrompt = `You are a helpful roofing company assistant. A customer is requesting a quote.
+
+Customer message: "${lastMessage.content}"
+Customer info we have: ${JSON.stringify(state.customerInfo || {})}
+
+Generate a friendly response that:
+1. Acknowledges their request for a quote
+2. Asks for any missing information we need (name, phone, address, type of roofing work)
+3. Let them know a specialist will follow up within 24 hours
+
+Keep the response concise and professional.`;
+
+	const response = await model.invoke(quotePrompt);
+
+	return {
+		response: response.content as string,
+		messages: [
+			...state.messages,
+			{ role: 'assistant', content: response.content as string },
+		],
+	};
+}
+
+async function handlePayment(state: GraphState): Promise<Partial<GraphState>> {
+	const lastMessage = state.messages[state.messages.length - 1];
+
+	const paymentPrompt = `You are a helpful roofing company assistant. A customer wants to make a payment.
+
+Customer message: "${lastMessage.content}"
+Customer info we have: ${JSON.stringify(state.customerInfo || {})}
+
+Generate a friendly response that:
+1. Thanks them for wanting to make a payment
+2. Asks for their account ID or the address where work was done (if not provided)
+3. Provides payment options: online portal (www.acmeroofing.com/pay), phone (555-ROOF-PAY), or in-person
+4. Mentions they can also set up autopay
+
+Keep the response concise and professional.`;
+
+	const response = await model.invoke(paymentPrompt);
+
+	return {
+		response: response.content as string,
+		messages: [
+			...state.messages,
+			{ role: 'assistant', content: response.content as string },
+		],
+	};
+}
+
+async function handleClarification(
+	state: GraphState,
+): Promise<Partial<GraphState>> {
+	const lastMessage = state.messages[state.messages.length - 1];
+
+	const clarifyPrompt = `You are a helpful roofing company assistant. The customer's message was unclear or off-topic.
+
+Customer message: "${lastMessage.content}"
+
+Generate a friendly response that:
+1. Politely acknowledges their message
+2. Asks them to clarify what they need help with
+3. Offers examples: quotes for roofing work or making payments on their account
+
+Keep the response concise and friendly.`;
+
+	const response = await model.invoke(clarifyPrompt);
+
+	return {
+		response: response.content as string,
+		messages: [
+			...state.messages,
+			{ role: 'assistant', content: response.content as string },
+		],
+	};
+}
+
+function routeAfterClassification(state: GraphState): string {
+	switch (state.intent) {
+		case 'quote':
+			return 'handleQuote';
+		case 'payment':
+			return 'handlePayment';
+		default:
+			return 'handleClarification';
+	}
+}
+
+const checkpointer = new MemorySaver();
+
+const roofingGraph = new StateGraph({ stateSchema: graphStateSchema })
+	// Add nodes and edges here
+	.compile({ checkpointer });
+
+// API Route
 export async function POST(request: NextRequest) {
 	try {
-		const { message } = await request.json();
+		const { message, threadId } = await request.json();
 
-		const experts = new Set(knowledgeBase.map((item: any) => item.advisor));
+		if (!message) {
+			return NextResponse.json(
+				{ error: 'Message is required' },
+				{ status: 400 },
+			);
+		}
 
-		const transcriptForExpert = (message: string) => {
-			return message.toLowerCase().includes('theo')
-				? fs.readFileSync('data/transcripts/theo.txt', 'utf8')
-				: '';
+		const config = {
+			configurable: {
+				thread_id: threadId || `thread_${Date.now()}`,
+			},
 		};
 
-		const SYSTEM_PROMPT = `
-    You have access to a knowledge base of coding experts. The experts are: ${Array.from(experts).join(', ')}.
-    If the question is not related to coding, you should say that you are not sure and you should not try to answer it.
-    If the user is asking for an advisor that is not in the knowledge base, you should say that you are not sure and you should not try to answer it.
-    Here is the knowledge base of the advisors: ${JSON.stringify(knowledgeBase, null, 2)}.
-    You should use the knowledge base to answer the question and add more context to the answer if needed. Do not just repeat the knowledge base, but use it to answer the question.
-
-    ${transcriptForExpert(message) ? `Here is the transcript for the expert: ${transcriptForExpert(message)}` : ''}
-    `;
-
-		const userResponse = await model.generateContent(
-			`${SYSTEM_PROMPT}\n\n User message: ${message}`,
+		const result = await roofingGraph.invoke(
+			{ messages: [{ role: 'user', content: message }] },
+			config,
 		);
-		console.log(JSON.stringify(userResponse.response, null, 2));
-		const response = userResponse.response.text();
 
 		return NextResponse.json({
-			response: response,
+			response: result.response,
+			intent: result.intent,
+			threadId: config.configurable.thread_id,
 		});
 	} catch (error) {
-		console.error('Chat API error:', error);
+		console.error('Chat error:', error);
 		return NextResponse.json(
-			{ error: 'Failed to generate response' },
+			{ error: 'Failed to process request' },
 			{ status: 500 },
 		);
 	}
