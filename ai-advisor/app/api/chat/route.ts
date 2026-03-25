@@ -88,6 +88,7 @@ Keep the response concise and professional.`;
 	};
 }
 
+// Handles payment requests: Provides payment options and collects account info
 async function handlePayment(state: GraphState): Promise<Partial<GraphState>> {
 	const lastMessage = state.messages[state.messages.length - 1];
 
@@ -115,6 +116,7 @@ Keep the response concise and professional.`;
 	};
 }
 
+// Fallback node: Asks user to clarify when intent is unclear or off-topic
 async function handleClarification(
 	state: GraphState,
 ): Promise<Partial<GraphState>> {
@@ -142,6 +144,7 @@ Keep the response concise and friendly.`;
 	};
 }
 
+// Routes to the appropriate handler based on classified intent
 function routeAfterClassification(state: GraphState): string {
 	switch (state.intent) {
 		case 'quote':
@@ -155,17 +158,9 @@ function routeAfterClassification(state: GraphState): string {
 
 const checkpointer = new MemorySaver();
 
-const roofingGraph = new StateGraph({ stateSchema: graphStateSchema })
-	// Add nodes and edges here
-	.addNode('classifyIntent', classifyIntent)
-	.addNode('handleQuote', handleQuote)
-	.addNode('handlePayment', handlePayment)
-	.addNode('handleClarification', handleClarification)
-	.addEdge(START, 'classifyIntent')
-	.addEdge('classifyIntent', 'handleQuote')
-	.addEdge('classifyIntent', 'handlePayment')
-	.addEdge('classifyIntent', 'handleClarification')
-	.compile({ checkpointer });
+const roofingGraph = new StateGraph({ stateSchema: graphStateSchema }).compile({
+	checkpointer,
+});
 
 // API Route
 export async function POST(request: NextRequest) {
