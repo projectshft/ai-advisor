@@ -12,7 +12,7 @@ const graphStateSchema = z.object({
 		.array(z.object({ role: z.string(), content: z.string() }))
 		.describe('Conversation history'),
 	intent: z
-		.enum(['quote', 'payment', 'clarification'])
+		.enum(['quote', 'payment', 'clarification', 'invoice'])
 		.optional()
 		.describe('Classified intent of the user request'),
 	customerInfo: z
@@ -40,7 +40,7 @@ const model = new ChatGoogleGenerativeAI({
 // =============================================================================
 
 async function classifyIntent(state: GraphState): Promise<Partial<GraphState>> {
-	const lastMessage = state.messages[state.messages.length - 1];
+	const lastMessage = state.messages[state.messages.length - 1]; // get the last message from the messages array
 
 	const classificationPrompt = `You are an intent classifier for a roofing company chatbot.
 Classify the following customer message into ONE of these categories:
@@ -54,11 +54,18 @@ Respond with ONLY the intent category (quote, payment, or clarification).`;
 
 	const response = await model
 		.withStructuredOutput(
-			z.object({ intent: z.enum(['quote', 'payment', 'clarification']) }),
+			z.object({
+				intent: z.enum([
+					'quote',
+					'payment',
+					'clarification',
+					'invoice',
+				]),
+			}),
 		)
 		.invoke(classificationPrompt);
 
-	return { intent: response.intent };
+	return { intent: response.intent }; // quote, payment, or clarification
 }
 
 // Handles quote requests: Collects customer info and schedules follow-up
@@ -116,6 +123,31 @@ Keep the response concise and professional.`;
 	};
 }
 
+async function handleInvoice(state: GraphState): Promise<Partial<GraphState>> {
+	const lastMessage = state.messages[state.messages.length - 1];
+
+	const invoicePrompt = `You are a helpful roofing company assistant. A customer wants to view their invoice.
+
+Customer message: "${lastMessage.content}"
+Customer info we have: ${JSON.stringify(state.customerInfo || {})}
+
+Generate a friendly response that:
+1. Thanks them for wanting to view their invoice
+2. Asks for their account ID or the address where work was done (if not provided)
+3. Provides the invoice number or link to the invoice
+
+Keep the response concise and professional.`;
+
+	const response = await model.invoke(invoicePrompt);
+
+	return {
+		response: response.content as string,
+		messages: [
+			...state.messages,
+			{ role: 'assistant', content: response.content as string },
+		],
+	};
+}
 // Fallback node: Asks user to clarify when intent is unclear or off-topic
 async function handleClarification(
 	state: GraphState,
@@ -146,11 +178,16 @@ Keep the response concise and friendly.`;
 
 // Routes to the appropriate handler based on classified intent
 function routeAfterClassification(state: GraphState): string {
-	switch (state.intent) {
+	switch (
+		state.intent // quote, payment, or clarification
+	) {
+		// these are node names
 		case 'quote':
 			return 'handleQuote';
 		case 'payment':
 			return 'handlePayment';
+		case 'invoice':
+			return 'handleInvoice';
 		default:
 			return 'handleClarification';
 	}
@@ -158,9 +195,22 @@ function routeAfterClassification(state: GraphState): string {
 
 const checkpointer = new MemorySaver();
 
-const roofingGraph = new StateGraph({ stateSchema: graphStateSchema }).compile({
-	checkpointer,
-});
+const roofingGraph = new StateGraph({ stateSchema: graphStateSchema }) //initial state
+	// add nodes
+	.addNode('classifyIntent', classifyIntent)
+	.addNode('handleQuote', handleQuote)
+	.addNode('handlePayment', handlePayment)
+	.addNode('handleClarification', handleClarification)
+	.addNode('handleInvoice', handleInvoice)
+	// add edges
+	.addEdge(START, 'classifyIntent')
+	.addConditionalEdges('classifyIntent', routeAfterClassification)
+	.addEdge('handleQuote', END)
+	.addEdge('handlePayment', END)
+	.addEdge('handleInvoice', END)
+	.addEdge('handleClarification', END)
+	// compile
+	.compile({ checkpointer });
 
 // API Route
 export async function POST(request: NextRequest) {
