@@ -8,7 +8,7 @@
 
 Hey!
 
-You signed up for this. Remember? 5 days. Building an AI advisory board. Let's go.
+I'm excited for you and can't wait to see what you build in the next 5 days.
 
 Today we're doing the most basic thing you can possibly do with AI: make an API call. You type something in, it goes to Gemini, Gemini sends something back. Super duper simple.
 
@@ -19,6 +19,8 @@ But here's the thing - this is the foundation. Every fancy AI product you've see
 You should be on the student-starter branch, not main. Main has all the answers and that's no fun.
 
 Also - you're a software developer. Break things. Extend things. Make it weird. That's the whole point.
+
+Oh, and connect with me on LinkedIn if you haven't already: [linkedin.com/in/brianjenney](https://linkedin.com/in/brianjenney). Yes, I know. But it's still weirdly the best place to get hired and I post AI stuff that might actually be useful.
 
 – Brian
 
@@ -72,7 +74,7 @@ We're in the home stretch.
 
 Today we grab actual transcripts from YouTube using a Python script in Google Colab. No special keys needed. Just video IDs.
 
-Now your AI advisor can answer questions based on what these creators *actually said* - not just what you wrote in a JSON file.
+Now your AI advisor can answer questions based on what these creators _actually said_ - not just what you wrote in a JSON file.
 
 Quick heads up: we'll talk about vector databases and chunking today. We won't build one (that's a bigger topic), but you should know they exist. When you have thousands of transcripts, you can't just dump everything into the prompt. Context windows have limits.
 
@@ -111,6 +113,7 @@ Either way - reach out on LinkedIn or brian@parity.io. I genuinely want to see w
 ## Placeholder Links
 
 Replace these in your email system:
+
 - `{{DAY_1_LINK}}` - Day 1: Your First API Call
 - `{{DAY_2_LINK}}` - Day 2: System Prompts
 - `{{DAY_3_LINK}}` - Day 3: RAG with Knowledge Base
