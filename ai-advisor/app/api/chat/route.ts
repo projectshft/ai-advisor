@@ -1,11 +1,3 @@
-// =============================================================================
-// DAY 0: LangGraph Roofing Chatbot
-// =============================================================================
-// Yes, I'm about to ask you to connect on LinkedIn. I know. I'm sorry.
-// But it's still weirdly the best place to get hired, so here we are:
-// https://www.linkedin.com/in/briandjenney
-// =============================================================================
-
 import { NextRequest, NextResponse } from 'next/server';
 import { StateGraph, START, END, MemorySaver } from '@langchain/langgraph';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
@@ -165,6 +157,14 @@ const checkpointer = new MemorySaver();
 
 const roofingGraph = new StateGraph({ stateSchema: graphStateSchema })
 	// Add nodes and edges here
+	.addNode('classifyIntent', classifyIntent)
+	.addNode('handleQuote', handleQuote)
+	.addNode('handlePayment', handlePayment)
+	.addNode('handleClarification', handleClarification)
+	.addEdge(START, 'classifyIntent')
+	.addEdge('classifyIntent', 'handleQuote')
+	.addEdge('classifyIntent', 'handlePayment')
+	.addEdge('classifyIntent', 'handleClarification')
 	.compile({ checkpointer });
 
 // API Route
@@ -189,6 +189,8 @@ export async function POST(request: NextRequest) {
 			{ messages: [{ role: 'user', content: message }] },
 			config,
 		);
+
+		console.log('result', result);
 
 		return NextResponse.json({
 			response: result.response,

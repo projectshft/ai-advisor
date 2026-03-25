@@ -47,10 +47,10 @@ export default function Home() {
 			{/* ── Header ── */}
 			<pre style={{ margin: 0, color: '#00ff41' }}>{row('═')}</pre>
 			<pre style={{ margin: 0, color: '#00ff41' }}>
-				{'║'} {'AI ADVISOR SYSTEM'.padEnd(W - 4)} {'║'}
+				{'║'} {'ACME ROOFING CO.'.padEnd(W - 4)} {'║'}
 			</pre>
 			<pre style={{ margin: 0, color: '#00ff41' }}>
-				{'║'} {'IBM AS/400  -  ADVISORY TERMINAL  V1.0'.padEnd(W - 4)}{' '}
+				{'║'} {'CUSTOMER SERVICE TERMINAL  V1.0'.padEnd(W - 4)}{' '}
 				{'║'}
 			</pre>
 			<pre style={{ margin: 0, color: '#00ff41' }}>{row('═')}</pre>
@@ -62,7 +62,7 @@ export default function Home() {
 					day: '2-digit',
 				})}    TIME: ${new Date().toLocaleTimeString('en-US', {
 					hour12: false,
-				})}    SESSION: ADV001`}
+				})}    SESSION: ROOF001`}
 			</pre>
 
 			<pre style={{ margin: 0, color: '#00ff41' }}>{row()}</pre>
@@ -83,7 +83,7 @@ export default function Home() {
 					type='text'
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					placeholder='ENTER QUERY...'
+					placeholder='ASK ABOUT QUOTES, PAYMENTS, OR SERVICES...'
 					autoComplete='off'
 					spellCheck={false}
 					style={{
@@ -140,7 +140,7 @@ export default function Home() {
 				{loading
 					? '*** PROCESSING REQUEST — PLEASE WAIT ***'
 					: response ||
-						'** NO OUTPUT — SUBMIT AN INQUIRY TO BEGIN **'}
+						'** WELCOME TO ACME ROOFING — ASK ABOUT QUOTES OR PAYMENTS **'}
 			</div>
 		</div>
 	);
