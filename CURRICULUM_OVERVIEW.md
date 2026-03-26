@@ -201,7 +201,7 @@ A transcript downloading workflow using Google Colab that fetches YouTube video 
 
 ### Implementation
 
-**Google Colab Script**: `scripts/colab_youtube_downloader.py`
+**Google Colab Script**: `scripts/download_transcripts_colab.py`
 
 ```python
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -318,7 +318,7 @@ Knowing AI systems is how you level up.
 - Applied AI Accelerator program details
 - Humans in the loop, senior engineers, guest speakers
 - Learn what companies are actually hiring for
-- Contact: brian@parity.io or LinkedIn
+- Contact: brian@parsity.io or LinkedIn
 
 ---
 
