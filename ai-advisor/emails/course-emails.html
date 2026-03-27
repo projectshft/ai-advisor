@@ -1,0 +1,146 @@
+<!-- ========================================================================
+     DAY 1
+     Subject: Day 1: We're building an AI advisory board (and it's simpler than you think)
+     ======================================================================== -->
+
+<div><span>Hey {{ first_name }}!</span></div>
+<p> </p>
+<div><span>I'm super excited for you to start this course. I'm a senior software engineer who spent the last couple years building AI-powered products for startups - one got acquired, the other was for finding TikTok influencers for major record labels. I'll show you that at the end of the week.</span></div>
+<p> </p>
+<div><span>Here's what we're building: an </span><strong>AI advisory board</strong><span> through a chat interface. You'll be able to ask questions like "What does Theo think about testing?" or "What's Primeagen's take on Vim?" and get responses grounded in what these creators actually said.</span></div>
+<p> </p>
+<div><span>Quick intro if you don't know them:</span></div>
+<p> </p>
+<div><span>• </span><strong><a href="https://www.youtube.com/@t3dotgg">Theo (t3.gg)</a></strong><span> - Former Twitch engineer, runs a popular YouTube channel about web dev. Created the T3 Stack. Strong opinions on TypeScript and Next.js.</span></div>
+<p> </p>
+<div><span>• </span><strong><a href="https://www.youtube.com/@ThePrimeTimeagen">ThePrimeagen</a></strong><span> - Former Netflix engineer, famous for Vim skills and no-nonsense takes on software engineering. Very strong feelings about text editors.</span></div>
+<p> </p>
+<div><span>You can swap these out for anyone you want - business people, fitness gurus, whatever. The concepts are the same.</span></div>
+<p> </p>
+<div><span>Pretty cool, right?</span></div>
+<p> </p>
+<div><span>But before we get there, we have to start at the very basics. Today we're doing the most fundamental thing: making an API call to Gemini. You type something in, it goes to Gemini, Gemini sends something back. Super duper simple.</span></div>
+<p> </p>
+<div><a href="https://www.parsity.io/ai-advisors-day-1">Start Day 1 →</a></div>
+<p> </p>
+<div><span>You should be on the </span><span>`student-starter`</span><span> branch, not main. Main has all the solutions and that's no fun. The whole point is to make this your own.</span></div>
+<p> </p>
+<div><span>Here's the thing - the frameworks and languages don't matter. You're a software developer. You could build this in Rust, Python, whatever. The syntax changes, the concepts do not. I've literally rewritten the same product from Python to TypeScript and back again at different startups. Same exact stuff.</span></div>
+<p> </p>
+<div><span>So extend things. Break things. Make it weird. That's the whole point.</span></div>
+<p> </p>
+<div><span>Also - if you want to use Cursor or Claude to help you code, you absolutely should. I do.</span></div>
+<p> </p>
+<div><span>Oh, and connect with me on LinkedIn if you haven't: </span><a href="https://linkedin.com/in/brianjenney">linkedin.com/in/brianjenney</a><span>. I know, I know. But still weirdly the best place to get hired and I post AI stuff that might actually be useful.</span></div>
+<p> </p>
+<div><span>– Brian</span></div>
+
+
+<!-- ========================================================================
+     DAY 2
+     Subject: Day 2: Your AI is too helpful. Let's fix that.
+     ======================================================================== -->
+
+<div><span>You're back. Nice.</span></div>
+<p> </p>
+<div><span>Remember how Chipotle's chatbot was helping people solve linked lists? Yeah, don't be Chipotle.</span></div>
+<p> </p>
+<div><span>Today we add system prompts - basically telling the AI who it is, what it should do, and what it should absolutely NOT do. Think of it like SRP (Single Responsibility Principle) but for your prompts. I'm gonna keep mentioning SRP because it's genuinely the best mental model for this stuff.</span></div>
+<p> </p>
+<div><span>We're gonna make our advisor actually stay in its lane. No more answering questions about the weather in France when it should be talking about code.</span></div>
+<p> </p>
+<div><a href="https://www.parsity.io/ai-advisors-day-ii">Start Day 2 →</a></div>
+<p> </p>
+<div><span>Here's why this matters: if you're paying for tokens (and eventually you will be), every dumb question someone asks costs you money. Guardrails aren't just nice - they save you cash.</span></div>
+<p> </p>
+<div><span>Quick heads up: we're not doing chat history in this course. You know that fish from Finding Nemo that couldn't remember anything past 5 minutes? That's our chatbot right now. Every message starts fresh. It's something you could extend on your own though - the model totally supports it.</span></div>
+<p> </p>
+<div><span>Make this your own. Experiment with different personas. See what happens when you change the constraints.</span></div>
+<p> </p>
+<div><span>– Brian</span></div>
+
+
+<!-- ========================================================================
+     DAY 3
+     Subject: Day 3: Your AI is about to get way smarter
+     ======================================================================== -->
+
+<div><span>Still here? Respect.</span></div>
+<p> </p>
+<div><span>Today we do RAG - Retrieval Augmented Generation. Fancy words for "give the AI some data it doesn't already have."</span></div>
+<p> </p>
+<div><span>Here's the deal: these models have a training cutoff. They don't know what Theo said last week. They don't know your company's vacation policy. They don't know what Primeagen thinks about Vim (well, they might know that one). If you want them to know stuff, you gotta tell them.</span></div>
+<p> </p>
+<div><span>We're adding a knowledge base with thoughts from some YouTubers - Theo Brown, Primeagen, and yeah, me too (I had to pick someone, why not). Now when you ask "what does Primeagen think about Vim?" - it actually knows.</span></div>
+<p> </p>
+<div><a href="https://www.parsity.io/ai-advisors-day-iii">Start Day 3 →</a></div>
+<p> </p>
+<div><span>This AI advisory board concept actually came from a student in our program who built a more productionized version. He had business advisors like Alex Hormozi and Sahil Bloom, put all their transcripts in a vector database, and could get targeted advice based on hundreds of hours of their content.</span></div>
+<p> </p>
+<div><span>You can't just do this with ChatGPT. It doesn't have access to all that stuff.</span></div>
+<p> </p>
+<div><span>By the way - RAG is the most popular use case for AI in companies right now. It's the most obvious and "boring" way to do it, but that's why big companies like DoorDash and Spotify are using it. Not as sexy as agents, but this is what companies are actually paying for.</span></div>
+<p> </p>
+<div><span>Think about your information architecture. How will the LLM find the right piece of data? Structure matters.</span></div>
+<p> </p>
+<div><span>– Brian</span></div>
+
+
+<!-- ========================================================================
+     DAY 4
+     Subject: Day 4: We're scraping YouTube now
+     ======================================================================== -->
+
+<div><span>We're in the home stretch.</span></div>
+<p> </p>
+<div><span>Today we grab actual transcripts from YouTube using a Python script in Google Colab. No special keys needed. Just video IDs. This is really cool - you can take any video, pass in the ID, and boom, you get the transcript.</span></div>
+<p> </p>
+<div><span>Now your AI advisor can answer questions based on what these creators </span><em>actually said</em><span> - not just what I wrote in a JSON file.</span></div>
+<p> </p>
+<div><a href="https://www.parsity.io/ai-advisors-day-iv">Start Day 4 →</a></div>
+<p> </p>
+<div><span>I encourage you to use videos from whoever you like. Maybe it's me. Maybe it's Primeagen. Maybe it's Theo. Maybe it's completely outside tech - business, fitness, knitting, sharks, whatever floats your boat.</span></div>
+<p> </p>
+<div><span>Quick heads up though: we'll talk about vector databases and chunking today. We won't build one (that's a bigger topic we cover in the AI Developer Cohort), but you should know they exist.</span></div>
+<p> </p>
+<div><span>Here's the problem: transcripts can be really, really long. What if you wanted a thousand transcripts? You can't just dump all of that into Gemini. Context windows have limits. And even if they didn't, it muddies up the response. You want to give the model as little information as it needs, not everything you have.</span></div>
+<p> </p>
+<div><span>We're doing a naive version: if someone asks about Theo, we inject Theo's transcript. Simple. But it works.</span></div>
+<p> </p>
+<div><span>– Brian</span></div>
+
+
+<!-- ========================================================================
+     DAY 5
+     Subject: Day 5: You built something. Now what?
+     ======================================================================== -->
+
+<div><span>Final day. You made it.</span></div>
+<p> </p>
+<div><span>Look - what you built might not feel that complex. And that's kind of the secret. This stuff IS software development. It's just a new type of API with some quirks.</span></div>
+<p> </p>
+<div><span>Even though it might not feel that complex, I hope you're proud of the work you've done.</span></div>
+<p> </p>
+<div><span>Today I'm showing you a real product I built - a TikTok influencer finder for record labels like Roc Nation and Universal. Uses all the same concepts you learned, just at scale. Millions of data points, vector databases, the whole thing.</span></div>
+<p> </p>
+<div><a href="https://www.parsity.io/ai-advisors-day-v">Start Day 5 →</a></div>
+<p> </p>
+<div><span>Here's my ask: </span><strong>extend this thing.</strong><span> Add more transcripts. Try a vector database. Break it. Show it to your team. Do a hackathon at work where you introduce these ideas. This is how you gain leverage.</span></div>
+<p> </p>
+<div><span>There are developers working on "how do I prompt better and write more code?" And there are developers thinking "how do I build the infrastructure and products that make our company money?"</span></div>
+<p> </p>
+<div><span>Knowing how to build AI systems is how you level up.</span></div>
+<p> </p>
+<div><span>This stuff is hard to hire for. I designed the AI engineer interview process at my last company, and you would not believe how difficult it was to find people who knew RAG, how to build things properly, the pitfalls, how to test them. There's just not a lot of people that know this stuff yet.</span></div>
+<p> </p>
+<div><span>That's leverage. That's opportunity.</span></div>
+<p> </p>
+<div><span>If you want to go deeper, </span><strong>apply to Parsity's AI Developer Cohort</strong><span>. It's where we teach the production-level stuff with actual humans in the loop - me, other senior engineers, guest speakers monthly. You'll build real AI systems, not just follow tutorials.</span></div>
+<p> </p>
+<div><a href="https://parsity.io/ai-dev">Apply to the AI Developer Cohort →</a></div>
+<p> </p>
+<div><span>Either way - reach out on </span><a href="https://linkedin.com/in/brianjenney">LinkedIn</a><span> or brian@parsity.io. I genuinely want to see what you build. If you've extended this, figured out how to use a vector database, or you're confused about something - let me know.</span></div>
+<p> </p>
+<div><span>Thanks for doing this with me. Now go build something.</span></div>
+<p> </p>
+<div><span>– Brian</span></div>
