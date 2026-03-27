@@ -12,6 +12,12 @@ I'm super excited for you to start this course. I'm a senior software engineer w
 
 Here's what we're building: an **AI advisory board** through a chat interface. You'll be able to ask questions like "What does Theo think about testing?" or "What's Primeagen's take on Vim?" and get responses grounded in what these creators actually said.
 
+Quick intro if you don't know them:
+- **[Theo (t3.gg)](https://www.youtube.com/@t3dotgg)** - Former Twitch engineer, runs a popular YouTube channel about web dev. Created the T3 Stack. Strong opinions on TypeScript and Next.js.
+- **[ThePrimeagen](https://www.youtube.com/@ThePrimeTimeagen)** - Former Netflix engineer, famous for Vim skills and no-nonsense takes on software engineering. Very strong feelings about text editors.
+
+You can swap these out for anyone you want - business people, fitness gurus, whatever. The concepts are the same.
+
 Pretty cool, right?
 
 But before we get there, we have to start at the very basics. Today we're doing the most fundamental thing: making an API call to Gemini. You type something in, it goes to Gemini, Gemini sends something back. Super duper simple.
