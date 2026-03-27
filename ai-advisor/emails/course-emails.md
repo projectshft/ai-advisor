@@ -16,7 +16,7 @@ Pretty cool, right?
 
 But before we get there, we have to start at the very basics. Today we're doing the most fundamental thing: making an API call to Gemini. You type something in, it goes to Gemini, Gemini sends something back. Super duper simple.
 
-**[Start Day 1 →]({{DAY_1_LINK}})**
+**[Start Day 1 →](https://www.parsity.io/ai-advisors-day-1)**
 
 You should be on the `student-starter` branch, not main. Main has all the solutions and that's no fun. The whole point is to make this your own.
 
@@ -44,7 +44,7 @@ Today we add system prompts - basically telling the AI who it is, what it should
 
 We're gonna make our advisor actually stay in its lane. No more answering questions about the weather in France when it should be talking about code.
 
-**[Start Day 2 →]({{DAY_2_LINK}})**
+**[Start Day 2 →](https://www.parsity.io/ai-advisors-day-ii)**
 
 Here's why this matters: if you're paying for tokens (and eventually you will be), every dumb question someone asks costs you money. Guardrails aren't just nice - they save you cash.
 
@@ -66,9 +66,9 @@ Today we do RAG - Retrieval Augmented Generation. Fancy words for "give the AI s
 
 Here's the deal: these models have a training cutoff. They don't know what Theo said last week. They don't know your company's vacation policy. They don't know what Primeagen thinks about Vim (well, they might know that one). If you want them to know stuff, you gotta tell them.
 
-We're adding a knowledge base with thoughts from some YouTubers - Theo Brown, Primeagen, and yeah, me too (I had to pick someone, why not). Now when you ask "what does Primo think about Vim?" - it actually knows.
+We're adding a knowledge base with thoughts from some YouTubers - Theo Brown, Primeagen, and yeah, me too (I had to pick someone, why not). Now when you ask "what does Primeagen think about Vim?" - it actually knows.
 
-**[Start Day 3 →]({{DAY_3_LINK}})**
+**[Start Day 3 →](https://www.parsity.io/ai-advisors-day-iii)**
 
 This AI advisory board concept actually came from a student in our program who built a more productionized version. He had business advisors like Alex Hormozi and Sahil Bloom, put all their transcripts in a vector database, and could get targeted advice based on hundreds of hours of their content.
 
@@ -90,9 +90,9 @@ We're in the home stretch.
 
 Today we grab actual transcripts from YouTube using a Python script in Google Colab. No special keys needed. Just video IDs. This is really cool - you can take any video, pass in the ID, and boom, you get the transcript.
 
-Now your AI advisor can answer questions based on what these creators *actually said* - not just what I wrote in a JSON file.
+Now your AI advisor can answer questions based on what these creators _actually said_ - not just what I wrote in a JSON file.
 
-**[Start Day 4 →]({{DAY_4_LINK}})**
+**[Start Day 4 →](https://www.parsity.io/ai-advisors-day-iv)**
 
 I encourage you to use videos from whoever you like. Maybe it's me. Maybe it's Primeagen. Maybe it's Theo. Maybe it's completely outside tech - business, fitness, knitting, sharks, whatever floats your boat.
 
@@ -118,7 +118,7 @@ Even though it might not feel that complex, I hope you're proud of the work you'
 
 Today I'm showing you a real product I built - a TikTok influencer finder for record labels like Roc Nation and Universal. Uses all the same concepts you learned, just at scale. Millions of data points, vector databases, the whole thing.
 
-**[Start Day 5 →]({{DAY_5_LINK}})**
+**[Start Day 5 →](https://www.parsity.io/ai-advisors-day-v)**
 
 Here's my ask: **extend this thing.** Add more transcripts. Try a vector database. Break it. Show it to your team. Do a hackathon at work where you introduce these ideas. This is how you gain leverage.
 
@@ -138,14 +138,3 @@ Thanks for doing this with me. Now go build something.
 
 – Brian
 
----
-
-## Placeholder Links
-
-Replace these in your email system:
-
-- `{{DAY_1_LINK}}` - Day 1: Building Your AI Advisor
-- `{{DAY_2_LINK}}` - Day 2: System Prompts
-- `{{DAY_3_LINK}}` - Day 3: RAG with Knowledge Base
-- `{{DAY_4_LINK}}` - Day 4: YouTube Transcripts
-- `{{DAY_5_LINK}}` - Day 5: What's Next
