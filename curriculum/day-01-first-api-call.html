@@ -8,26 +8,53 @@
 
 <p>Pretty cool, right?</p>
 
-<p>But before we get there, we have to start at the very basics. Today we're doing the most fundamental thing: making an API call to Gemini. You type something in, it goes to Gemini, Gemini sends something back. Super duper simple.</p>
+<h3>Meet Your Advisors</h3>
 
-<h2>How LLM APIs Work</h2>
+<p>Before we start coding, let me introduce the experts you'll be adding to your advisory board:</p>
 
-<p>At its core, an LLM API is just like any other API:</p>
-<ol>
-<li>You send text (a "prompt") to the API</li>
-<li>The API processes it with a large language model</li>
-<li>You get text back (the "completion")</li>
-</ol>
+<ul>
+<li><b><a href="https://www.youtube.com/@t3dotgg" target="_blank">Theo (t3.gg)</a></b> - A former Twitch engineer who now runs a popular YouTube channel about web development. He's known for strong opinions on TypeScript, Next.js, and the JavaScript ecosystem. If you've heard of the T3 Stack, that's him.</li>
+<li><b><a href="https://www.youtube.com/@ThePrimeTimeagen" target="_blank">ThePrimeagen</a></b> - A former Netflix engineer famous for his Vim skills and no-nonsense takes on software engineering. He streams coding, talks about performance, and has very strong feelings about text editors.</li>
+<li><b>Brian (me)</b> - I'm a senior engineer who's spent the last couple years building AI products at startups. One got acquired, another helped record labels find TikTok influencers. I'll show you that at the end of the week.</li>
+</ul>
 
-<p>That's it. Text in, text out. Everything else - chatbots, AI assistants, code generators - is built on top of this basic pattern. Don't let it feel magical. It's just another API that returns text instead of JSON.</p>
+<p>You can swap these out for anyone you want - business people, fitness gurus, whatever. The concepts are the same.</p>
 
-<h2>About the Interface</h2>
+<h3>What We'll Cover</h3>
 
-<p>You might notice the UI looks like an old AS/400 terminal - green screen, retro vibes. That's intentional. We're keeping the frontend simple so you can focus on the AI concepts, not CSS. Feel free to make it prettier if you want, but the styling isn't the point.</p>
+<ul>
+<li><b>Day 1 (today):</b> Make your first LLM API call</li>
+<li><b>Day 2:</b> System prompts to control AI behavior</li>
+<li><b>Day 3:</b> RAG (Retrieval-Augmented Generation) with a knowledge base</li>
+<li><b>Day 4:</b> Add real data from YouTube transcripts</li>
+<li><b>Day 5:</b> See a real product demo and what's next</li>
+</ul>
 
-<h2>Step 1: Set Up Your API Key</h2>
+<h2>Prerequisites</h2>
 
-<p>First, get your Gemini API key:</p>
+<p>You should be comfortable with:</p>
+<ul>
+<li>JavaScript/TypeScript basics</li>
+<li>Running commands in a terminal</li>
+<li>Basic React concepts (helpful but not required)</li>
+</ul>
+
+<h2>Setup: Get the Starter Code</h2>
+
+<p>Clone the project and install dependencies:</p>
+
+<pre>
+git clone https://github.com/projectshft/ai-advisor.git
+cd ai-advisor
+git checkout student-starter
+npm install
+</pre>
+
+<p><b>Important:</b> Make sure you're on the <code>student-starter</code> branch, not main. Main has all the solutions and that's no fun. The whole point is to make this your own.</p>
+
+<h2>Setup: Get Your Gemini API Key</h2>
+
+<p>We're using Google's Gemini API because it has a generous free tier - perfect for learning.</p>
 
 <ol>
 <li>Go to <b>ai.google.dev</b></li>
@@ -43,7 +70,22 @@
 GEMINI_API_KEY=your_api_key_here
 </pre>
 
-<h2>Step 2: Build the API Route</h2>
+<h2>About the Interface</h2>
+
+<p>You might notice the UI looks like an old AS/400 terminal - green screen, retro vibes. That's intentional. We're keeping the frontend simple so you can focus on the AI concepts, not CSS. Feel free to make it prettier if you want, but the styling isn't the point.</p>
+
+<h2>How LLM APIs Work</h2>
+
+<p>At its core, an LLM API is just like any other API:</p>
+<ol>
+<li>You send text (a "prompt") to the API</li>
+<li>The API processes it with a large language model</li>
+<li>You get text back (the "completion")</li>
+</ol>
+
+<p>That's it. Text in, text out. Everything else - chatbots, AI assistants, code generators - is built on top of this basic pattern. Don't let it feel magical. It's just another API that returns text instead of JSON.</p>
+
+<h2>Step 1: Build the API Route</h2>
 
 <p>Open <b>app/api/chat/route.ts</b>. This is where the magic happens (except it's not magic, it's just an API call).</p>
 
@@ -82,7 +124,7 @@ export async function POST(request: NextRequest) {
 
 <p><b>Heads up:</b> Model names change! If you're using Cursor or Claude to help you code (and you should be), they might suggest models that don't exist anymore. Always check the <a href="https://ai.google.dev/gemini-api/docs/models" target="_blank">Gemini docs</a> for current models.</p>
 
-<h2>Step 3: Test It!</h2>
+<h2>Step 2: Test It!</h2>
 
 <p>Make sure your dev server is running:</p>
 
@@ -99,7 +141,7 @@ npm run dev
 <li>"Explain APIs to a 5 year old"</li>
 </ul>
 
-<h2>Step 4: Look Under the Hood</h2>
+<h2>Step 3: Look Under the Hood</h2>
 
 <p>Add some console logging to see what's actually happening:</p>
 
